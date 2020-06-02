@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class SignupActivity extends AppCompatActivity {
-    Spinner mCountryname;
+
     DatePicker mDateofbirth;
     EditText mName, mAddress, mEmail, mUsername, mPassword, mConfirmPassword;
     RadioGroup mGenderGroup;
@@ -38,8 +38,8 @@ public class SignupActivity extends AppCompatActivity {
     int genderid;
     Button mSubmit;
     JsonParsers jsonparser;
-   // Date dob = new Date();
-    String dob_text, countryname, fullname, email, address, gender, username, password, confirmpassword, phoneno;
+
+    String dob_text, fullname, email, address, gender, username, password, confirmpassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,22 +60,7 @@ public class SignupActivity extends AppCompatActivity {
 
         mSubmit = (Button) findViewById(R.id.signupbutton_signup);
 
-        //mCountryname  = (Spinner) findViewById(R.id.countryspinner_signup);
 
-        Locale[] locale = Locale.getAvailableLocales();
-        ArrayList<String> countries = new ArrayList<String>();
-        String country;
-        for( Locale loc : locale ){
-            country = loc.getDisplayCountry();
-            if( country.length() > 0 && !countries.contains(country) ){
-                countries.add( country );
-            }
-        }
-        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
-
-        //Spinner citizenship = (Spinner)findViewById(R.id.countryspinner_signup);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, countries);
-        //citizenship.setAdapter(adapter);
 
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +88,8 @@ public class SignupActivity extends AppCompatActivity {
         password = mPassword.getText().toString();
         confirmpassword = mConfirmPassword.getText().toString();
         dob_text = String.valueOf(mDateofbirth.getYear())+"-"+String.valueOf(mDateofbirth.getMonth()+1)+"-"+String.valueOf(mDateofbirth.getDayOfMonth());
-        phoneno = getIntent().getStringExtra("phoneNo");
-        countryname = getIntent().getStringExtra("countryName");
+        //phoneno = getIntent().getStringExtra("phoneNo");
+        //countryname = getIntent().getStringExtra("countryName");
 
         if(fullname.length()<1 || fullname.equals(null)){
             mName.setError("Enter Name");
@@ -137,7 +122,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                 }
                                 else{
-                                    new Asyncer().execute(fullname,countryname,email,address,gender,username,password,dob_text,phoneno);
+                                    new Asyncer().execute(fullname,email,address,gender,username,password,dob_text);
                                 }
                             }
                         }
@@ -176,33 +161,28 @@ public class SignupActivity extends AppCompatActivity {
                 showProgressDialouge();
             }
 
-            public String sname, semail, scountry, saddress,sgender,susername,spassword,sdob,sphno;
-            //fullname,countryname,email,address,gender,username,password,dob_text,phoneno
+            public String sname, semail, saddress,sgender,susername,spassword,sdob;
+
             @Override
              protected String doInBackground(String... strings) {
                 sname = strings[0];
-                scountry = strings[1];
-                semail = strings[2];
-                saddress = strings[3];
-                sgender = strings[4];
-                susername = strings[5];
-                spassword = strings[6];
-                sdob = strings[7];
-                sphno = strings[8];
-                //sphno = "9808";
-                System.out.println("=============="+sname+scountry+semail+saddress+"=================");
+                semail = strings[1];
+                saddress = strings[2];
+                sgender = strings[3];
+                susername = strings[4];
+                spassword = strings[5];
+                sdob = strings[6];
+                System.out.println("=============="+sname+semail+saddress+"=================");
                 HashMap<String,String> datas =new HashMap<>();
                 datas.put("name", sname);
-                datas.put("countryname", scountry);
                 datas.put("email", semail);
                 datas.put("address", saddress);
                 datas.put("gender", sgender);
                 datas.put("username", susername);
                 datas.put("password", spassword);
                 datas.put("dob", sdob);
-                datas.put("phoneno", sphno);
 
-                jsonboj = jsonparser.registerUser("http://"+ConstantValues.ipaddress+"/LMS/AddUser/", datas);
+                jsonboj = jsonparser.registerUser("http://"+ConstantValues.ipaddress+"/LibMS/AddStaff/", datas);
                 //System.out.println(jsonboj.get("errorCode"));
                 try{
                     if(jsonboj == null){

@@ -23,7 +23,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="User Registration"
+        android:text="STAFF Registration"
         android:gravity="center"
         android:textSize="25dp"
         android:textStyle="bold"

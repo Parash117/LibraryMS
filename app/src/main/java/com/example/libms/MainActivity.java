@@ -1,5 +1,6 @@
 package com.example.libms;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,9 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
+    int uid;
+    TextView mUser_name,mUser_id;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -51,6 +54,22 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        Intent intent  = this.getIntent();
+        String name = intent.getStringExtra("name");
+        //uid = intent.getStringExtra("uid");
+        if(intent!=null){
+            if(intent.hasExtra("uid")){
+                uid =intent.getIntExtra("uid",0);
+            }
+        }
+
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        headerView.findViewById(R.id.nav_header_user_name);
+        mUser_name = (TextView) headerView.findViewById(R.id.nav_header_user_name);
+        mUser_name.setText(name);
+        mUser_id = (TextView) headerView.findViewById(R.id.nav_header_user_id);
+        mUser_id.setText("User ID: "+String.valueOf(uid));
+
     }
 
     @Override

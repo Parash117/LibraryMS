@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView mSignup,mForgot;
     JsonParsers jsonParsers;
     Context context =this;
-    //UserDetailViewModel userDetailViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         mpassword = (EditText) findViewById(R.id.password_login);
         mForgot = (TextView) findViewById(R.id.login_forgotPassword);
         final Intent i = new Intent(this, MainActivity.class);
-       // userDetailViewModel = ViewModelProviders.of(this).get(UserDetailViewModel.class);
         jsonParsers = new JsonParsers();
 
 
@@ -47,34 +45,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 username = musername.getText().toString();
                 password = mpassword.getText().toString();
-
-                //Toast.makeText(context, username+password,Toast.LENGTH_SHORT).show();
-                //startActivity(i);
-
                 checkuser();
 
             }
         });
-        /*final Intent ii = new Intent(this, ForgotPass.class);
-        mForgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                startActivity(ii);
-            }
-        });*/
 
         mSignup = (TextView)findViewById(R.id.signup_text_login);
-        //final Intent j =new Intent(this, PhoneAuthActivity.class);
         final Intent j =new Intent(this, SignupActivity.class);
 
         mSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 startActivity(j);
-
             }
         });
     }
@@ -82,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     public void checkuser(){
         new loginasync().execute(username,password);
     }
+
     public class loginasync extends AsyncTask<String,String,String>{
         int FLAG;
         JSONObject jsonObject;
@@ -107,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             datas.put("username", username);
             datas.put("password", password);
 
-            jsonObject = jsonParsers.registerUser("http://"+ConstantValues.ipaddress+"/maremare/login/", datas);
+            jsonObject = jsonParsers.registerUser("http://"+ConstantValues.ipaddress+"/LibMS/login/", datas);
 
             try{
                 if(jsonObject == null){
@@ -131,25 +115,16 @@ public class LoginActivity extends AppCompatActivity {
             if(FLAG == 1){
                 Toast.makeText(LoginActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }else if(FLAG == 2){
-                Toast.makeText(LoginActivity.this, "Regestration Successfull", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_LONG).show();
                 try {
                     int uid = jsonObject.getInt("uid");
                     String name = jsonObject.getString("name");
-                    String token = jsonObject.getString("token");
-                    String phno = jsonObject.getString("phoneno");
-                    String country = jsonObject.getString("countryname");
                     System.out.println(name);
-
-                    //inserting details of loged in users in room
-                    //UserDetail userDetail = new UserDetail(String.valueOf(uid),name,phno,token,country);
-                   // userDetailViewModel.insert(userDetail);
                     pdiag.dismiss();
                     Toast.makeText(LoginActivity.this, String.valueOf(uid), Toast.LENGTH_LONG).show();
                     Intent ii = new Intent(LoginActivity.this, MainActivity.class);
                     ii.putExtra("uid",uid);
                     ii.putExtra("name", name);
-                    ii.putExtra("phoneno",phno);
-                    ii.putExtra("country", country);
                     ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(ii);
                     finish();
@@ -157,8 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                 catch (JSONException es){
                     System.out.println(es);
                 }
-                //Intent in = new Intent(SignupActivity.this, LoginActivity.class);
-                //startActivity(in);
+
             }else if(FLAG == 3){
                 Toast.makeText(LoginActivity.this, "Server error", Toast.LENGTH_SHORT).show();
                 pdiag.dismiss();
