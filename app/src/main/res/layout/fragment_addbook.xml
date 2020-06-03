@@ -38,7 +38,7 @@
                     android:id="@+id/fragment_productadd_product_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name of Item" />
+                    android:hint="Name of Book" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </RelativeLayout>
@@ -56,8 +56,27 @@
             android:id="@+id/third_rl"
             android:layout_toEndOf="@+id/second_rl"
             android:layout_below="@+id/first_rl"
-            android:layout_marginLeft="10dp">
-
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textSize="20dp"
+                android:layout_centerVertical="true"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/quantity_text"/>
+            <EditText
+                android:layout_width="100dp"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:hint="01"
+                android:text="01"
+                android:layout_toRightOf="@+id/quantity_text"
+                android:id="@+id/fragment_productadd_book_quantity"
+                android:inputType="number"/>
 
         </RelativeLayout>
         <RelativeLayout
@@ -120,11 +139,11 @@
                 android:layout_marginRight="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fragment_productadd_product_usedtime"
+                    android:id="@+id/fragment_productadd_book_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:hint="Used for (Months)" />
+                    android:inputType="text"
+                    android:hint="Author" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -140,32 +159,18 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Delivery"
+                android:text="Date Of Bought"
                 android:id="@+id/fragment_productadd_product_deliveryn"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"/>
-            <RadioGroup
+
+            <DatePicker
+                android:layout_below="@id/fragment_productadd_product_deliveryn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_below="@+id/fragment_productadd_product_deliveryn"
-                android:orientation="horizontal"
-                android:id="@+id/fragment_productadd_product_delivery_status">
-                <RadioButton    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Yes"
-                    android:layout_marginRight="50dp"
-                    android:id="@+id/delivery_yes" />
-                <RadioButton    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/delivery_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No" />
-            </RadioGroup>
+                android:id="@+id/fragment_productadd_book_add_date"
+                android:datePickerMode="spinner"/>
 
         </RelativeLayout>
 
@@ -179,7 +184,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delivery Charge "
+                android:text="Cost of Book"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 android:id="@+id/textofdeliverycharge"/>
@@ -192,7 +197,7 @@
                 android:inputType="numberSigned"
                 android:textAlignment="center"
                 android:text="00"
-                android:id="@+id/fragment_productadd_product_delivery_cost"/>
+                android:id="@+id/fragment_productadd_book_cost"/>
 
 
         </RelativeLayout>
@@ -255,10 +260,10 @@
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp">
             <androidx.recyclerview.widget.RecyclerView
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/fragment_productadd_listView">
+
             </androidx.recyclerview.widget.RecyclerView>
         </RelativeLayout>
         <RelativeLayout
