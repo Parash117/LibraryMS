@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="4dp"
+    android:background="#E8E8E8"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/first_rl">
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:id="@+id/booklist_productimage"
+            android:src="@drawable/book_open_flat"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/second_rl"
+        android:layout_toEndOf="@+id/first_rl">
+
+        <TextView
+            android:id="@+id/booklist_nameofitem"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:text="Name of Book"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/third_rl"
+        android:layout_toEndOf="@+id/first_rl"
+        android:layout_below="@+id/second_rl">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:text="Date"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/booklist_dateofitem"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/third_rl"
+        android:layout_below="@id/second_rl"
+        android:id="@+id/forth_rl">
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="0dp"
+            android:text="quantity :" />
+        <TextView
+            android:layout_toEndOf="@+id/quantity"
+            android:id="@+id/booklist_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="0dp"
+            android:text="quantity" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/first_rl"
+        android:layout_below="@id/third_rl"
+        android:id="@+id/fifth_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:id="@+id/booklist_ownerofitem"
+            android:text="Category"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/fifth_rl"
+        android:layout_below="@id/forth_rl"
+        android:id="@+id/sixth_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Author"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/booklist_author"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/first_rl"
+        android:layout_below="@id/fifth_rl"
+        android:id="@+id/seventh_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/booklist_detailofitem"
+            android:text="Details"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background=" #af002a">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="140dp"
+            android:layout_marginLeft="0dp"
+            android:src="@drawable/ic_menu_trash"
+            android:id="@+id/booklist_delete_btn"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

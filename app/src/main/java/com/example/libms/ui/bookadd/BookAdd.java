@@ -112,6 +112,7 @@ public class BookAdd extends Fragment {
         mAuthor = (TextView) root.findViewById(R.id.fragment_productadd_book_author);
         mCost = (TextView) root.findViewById(R.id.fragment_productadd_book_cost);
         mDateofAdd = (DatePicker) root.findViewById(R.id.fragment_productadd_book_add_date);
+        mDateofAdd.setCalendarViewShown(false);
         submitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,6 +239,8 @@ public class BookAdd extends Fragment {
                 Toast.makeText(getActivity(), "Added ", Toast.LENGTH_LONG).show();
                 //uploadImagesToServer(rooter);
                 mProgressbar2.setVisibility(View.GONE);
+                hideProgress();
+                pdiag.dismiss();
 
             }else if(FLAG == 3){
                 Toast.makeText(getActivity(), "Server error", Toast.LENGTH_SHORT).show();
