@@ -65,8 +65,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         mAuthor = (TextView) findViewById(R.id.product_detail_activity_author);
         mKnockbtn = (Button) findViewById(R.id.product_detail_activity_knockbtn);
         mProductImage = (ImageView) findViewById(R.id.product_detail_activity_image);
-        mCloseIcon.setVisibility(View.GONE);
-
+        //mCloseIcon.setVisibility(View.GONE);
+        mKnockbtn.setVisibility(View.VISIBLE);
         Intent intent  = this.getIntent();
         String pid = intent.getStringExtra("pid");
         this.pid = Integer.parseInt(pid);
@@ -85,7 +85,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mCloseIcon.setVisibility(View.VISIBLE);
+
 
             }
         });
@@ -94,7 +94,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
     private void loadproducts(String pid){
         final String pid1111 = pid;
-        String URL = "http://"+ConstantValues.ipaddress+"/maremare/getproductdetail/index.php?pid="+pid;
+        String URL = "http://"+ConstantValues.ipaddress+"/LibMS/getproductdetail/index.php?pid="+pid;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
                     @Override
