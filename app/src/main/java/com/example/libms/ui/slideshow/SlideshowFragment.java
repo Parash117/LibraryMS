@@ -104,7 +104,8 @@ public class SlideshowFragment extends Fragment {
                                         product.getString("quantity"),
                                         product.getString("author"),
                                         product.getString("cost"),
-                                        product.getString("remaining")
+                                        product.getString("remaining"),
+                                        product.getString("primary_photo")
                                 ));
                             }
 

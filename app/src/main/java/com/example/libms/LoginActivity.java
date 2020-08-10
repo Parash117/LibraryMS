@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if(FLAG == 1){
                 Toast.makeText(LoginActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                pdiag.dismiss();
             }else if(FLAG == 2){
                 Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_LONG).show();
                 try {
@@ -134,10 +135,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }else if(FLAG == 3){
-                Toast.makeText(LoginActivity.this, "Server error", Toast.LENGTH_SHORT).show();
                 pdiag.dismiss();
+                pdiag.cancel();
+                Toast.makeText(LoginActivity.this, "Password or Username Incorrect", Toast.LENGTH_SHORT).show();
+
             }else{
                 Toast.makeText(LoginActivity.this, "try again", Toast.LENGTH_SHORT).show();
+                pdiag.dismiss();
             }
 
         }

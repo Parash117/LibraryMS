@@ -380,7 +380,7 @@ public class BookAdd extends Fragment {
             }
 
             // create a map of data to pass along
-            RequestBody description = createPartFromString("www.maremare.com");
+            RequestBody description = createPartFromString("www.libms.com");
             RequestBody size = createPartFromString(""+parts.size());
             RequestBody uuid = createPartFromString(""+recent_pid);
 
@@ -462,7 +462,7 @@ public class BookAdd extends Fragment {
                 if(jsonObject == null){
                     FLAG = 1;
                 }else if(jsonObject.getString("status").equals("success")){
-                    //recent_pid = jsonObject.getString("recent_pid");
+                    recent_pid = jsonObject.getString("recent_pid");
                     FLAG = 2;
 
                 }else{
@@ -483,7 +483,7 @@ public class BookAdd extends Fragment {
                 mProgressbar2.setVisibility(View.GONE);
             }else if(FLAG == 2){
                 Toast.makeText(getActivity(), "Added ", Toast.LENGTH_LONG).show();
-                //uploadImagesToServer(rooter);
+                uploadImagesToServer(rooter);
                 mProgressbar2.setVisibility(View.GONE);
                 hideProgress();
                 pdiag.dismiss();

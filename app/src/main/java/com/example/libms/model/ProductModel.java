@@ -2,9 +2,9 @@ package com.example.libms.model;
 
 public class ProductModel {
 
-    public String pid, pname, dateofpost, details, categoryId, uid, quantity, author, cost, remaining;
+    public String pid, pname, dateofpost, details, categoryId, uid, quantity, author, cost, remaining, primaryimage;
 
-    public ProductModel(String pid, String pname, String dateofpost, String details, String categoryId, String uid, String quantity, String author, String cost, String remaining) {
+    public ProductModel(String pid, String pname, String dateofpost, String details, String categoryId, String uid, String quantity, String author, String cost, String remaining,String primaryimage) {
         this.pid = pid;
         this.pname = pname;
         this.dateofpost = dateofpost;
@@ -15,6 +15,7 @@ public class ProductModel {
         this.author = author;
         this.cost = cost;
         this.remaining = remaining;
+        this.primaryimage = primaryimage;
     }
 
     public String getPid() {
@@ -23,6 +24,14 @@ public class ProductModel {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    public String getPrimaryimage() {
+        return primaryimage;
+    }
+
+    public void setPrimaryimage(String primaryimage) {
+        this.primaryimage = primaryimage;
     }
 
     public String getPname() {
