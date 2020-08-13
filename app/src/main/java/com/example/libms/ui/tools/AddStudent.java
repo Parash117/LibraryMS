@@ -6,11 +6,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -30,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -43,6 +49,7 @@ import com.example.libms.ui.bookadd.BookAdd;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +66,7 @@ public class AddStudent extends Fragment implements LocationListener {
     Button submitbtn,mSetLocationBtn;
     TextView mName,mEmail,mPhoneno,mLongitude, mLatitude;
     DatePicker mdob;
+    ImageView mStdImage;
     int uid;
     String pname,author, phoneno, cost;
 
@@ -72,6 +80,8 @@ public class AddStudent extends Fragment implements LocationListener {
 
     private View rooter;
     private static  final int REQUEST_LOCATION=1;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int CAMERA_REQUEST = 1888;
     String recent_pid;
     ProgressDialog pdiag;
 
@@ -125,6 +135,21 @@ public class AddStudent extends Fragment implements LocationListener {
         mLongitude = (TextView) root.findViewById(R.id.addstudent_add_longitude_);
         mLatitude = (TextView) root.findViewById(R.id.addstudent_add_latitude);
         mSetLocationBtn = (Button) root.findViewById(R.id.addstudent_setLocation_btn);
+        mStdImage = (ImageView) root.findViewById(R.id.addstudent_image);
+
+        mStdImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermission()) {
+                    Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    startActivityForResult(intent, CAMERA_REQUEST);
+                } else {
+                    requestPermission();
+                }
+            }
+        });
+
 
         mSetLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +175,7 @@ public class AddStudent extends Fragment implements LocationListener {
                         public void run() {
                             enderLocation();
                         }
-                    }, 10, 10, TimeUnit.SECONDS);
+                    }, 1, 18, TimeUnit.SECONDS);
                     //locationManager.removeUpdates(locationListenerGPS);
                 }
             }
@@ -210,6 +235,30 @@ public class AddStudent extends Fragment implements LocationListener {
         return root;
     }
 
+    // Star activity for result method to Set captured image on image view after click.
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST && resultCode == getActivity().RESULT_OK) {
+
+            Uri uri = data.getData();
+
+            try {
+
+                // Adding captured image in bitmap.
+               //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                // adding captured image in imageview.
+                mStdImage.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     public void showProgressDialouge(){
         pdiag.setMessage("Uploading Please Wait...!");
@@ -219,6 +268,60 @@ public class AddStudent extends Fragment implements LocationListener {
     private void hideProgress() {
         mProgressbar.setVisibility(View.GONE);
 
+    }
+
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(getActivity(),
+                new String[]{Manifest.permission.CAMERA},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+
+                    // main logic
+                } else {
+                    Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            showMessageOKCancel("You need to allow access permissions",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermission();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     private void OnGPS() {
@@ -313,7 +416,7 @@ public class AddStudent extends Fragment implements LocationListener {
             }
             else
             {
-                Toast.makeText(getActivity(), "Can't Get Your Location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Tracking Location..!!", Toast.LENGTH_SHORT).show();
             }
 
             //Thats All Run Your App

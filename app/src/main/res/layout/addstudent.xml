@@ -285,7 +285,12 @@
             android:layout_below="@+id/eleventh_rl"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp">
-
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:id="@+id/addstudent_image"
+                android:src="@drawable/ic_add_a_photo_black_24dp"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
