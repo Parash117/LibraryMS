@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="250dp"
+            android:background="#000000"
+            android:alpha="0.7">
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:id="@+id/addstudent_progress_bar"/>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/first_rl">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/addstudent_product_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name of Student" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/first_rl"
+            android:id="@+id/second_rl">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/third_rl"
+            android:layout_toEndOf="@+id/second_rl"
+            android:layout_below="@+id/first_rl"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Semester"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/addstudent_semster_text"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addstudent_semster_text"
+                android:id="@+id/addstudent_semesterspinner"></Spinner>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/forth_rl"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/third_rl">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Faculty"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/faculty"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/faculty"
+                android:id="@+id/addstudent_faculty_spinner"></Spinner>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/fifth_rl"
+            android:layout_below="@+id/forth_rl"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:id="@+id/addstudent_gender_radiogroup_text"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"/>
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_below="@+id/addstudent_gender_radiogroup_text"
+                android:orientation="horizontal"
+                android:id="@+id/addstudent_gender_radiogroup">
+                <RadioButton    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:layout_marginRight="50dp"
+                    android:id="@+id/gender_male" />
+                <RadioButton    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/gender_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </RadioGroup>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sixth_rl"
+            android:layout_below="@+id/fifth_rl"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/das"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/addstudent_book_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Email Address" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seventh_rl"
+            android:layout_below="@id/sixth_rl"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date Of Bought"
+                android:id="@+id/addstudent_product_deliveryn"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"/>
+
+            <DatePicker
+                android:layout_below="@id/addstudent_product_deliveryn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/addstudent_book_add_date"
+                android:datePickerMode="spinner"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/eigth_rl"
+            android:layout_below="@+id/seventh_rl"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobile No. "
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:id="@+id/textofdeliverycharge"/>
+
+            <EditText
+                android:layout_width="280dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/textofdeliverycharge"
+                android:inputType="numberSigned"
+                android:textAlignment="center"
+                android:text="+977"
+                android:id="@+id/addstudent_book_phoneno"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ninth_rl"
+            android:gravity="center"
+            android:layout_below="@+id/eigth_rl">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude: "
+                android:id="@+id/addstudent_add_longitude_text"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/addstudent_add_longitude_text"
+                android:text="000000"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/addstudent_add_longitude_"/>
+
+
+
+            <TextView
+                android:layout_below="@+id/addstudent_add_longitude_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude: "
+                android:id="@+id/addstudent_add_latitude_text"/>
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addstudent_add_longitude_text"
+                android:layout_toEndOf="@+id/addstudent_add_latitude_text"
+                android:text="000000"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/addstudent_add_latitude"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tenth_rl"
+            android:layout_below="@+id/ninth_rl">
+            <ProgressBar
+                android:id="@+id/addstudent_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/eleventh_rl"
+            android:layout_below="@+id/tenth_rl"
+            android:gravity="center">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Locaiton"
+                android:id="@+id/addstudent_setLocation_btn"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/last_rl"
+            android:layout_below="@+id/eleventh_rl"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp">
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/last_rl"
+            android:id="@+id/last_last_rl"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:id="@+id/addstudent_submit"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

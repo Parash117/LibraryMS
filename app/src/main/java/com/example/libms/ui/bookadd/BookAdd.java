@@ -131,7 +131,18 @@ public class BookAdd extends Fragment {
         animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
         animation.setRepeatMode(Animation.REVERSE);
 
+
         ArrayList<String> CatagoryArray = new ArrayList<>();
+        CatagoryArray.add("Biography/Autobiography");
+        CatagoryArray.add("Essay");
+        CatagoryArray.add("Memoir");
+        CatagoryArray.add("Narrative Nonfiction");
+        CatagoryArray.add("Periodicals");
+        CatagoryArray.add("Reference Books");
+        CatagoryArray.add("Self-help Book");
+        CatagoryArray.add("Speech");
+        CatagoryArray.add("Textbook");
+        CatagoryArray.add("Poetry");
         final Spinner spinner2 = (Spinner) root.findViewById(R.id.fragment_productadd_catagory_spinner);
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_dropdown_item,CatagoryArray);
         spinner2.setAdapter(adapter2);

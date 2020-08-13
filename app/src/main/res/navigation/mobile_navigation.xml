@@ -25,9 +25,9 @@
 
     <fragment
         android:id="@+id/nav_tools"
-        android:name="com.example.libms.ui.tools.ToolsFragment"
+        android:name="com.example.libms.ui.tools.AddStudent"
         android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/addstudent" />
 
     <fragment
         android:id="@+id/nav_share"
