@@ -14,8 +14,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,24 +38,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
+import com.example.libms.ApiService;
 import com.example.libms.ConstantValues;
+import com.example.libms.FileUtils;
+import com.example.libms.InternetConnection;
 import com.example.libms.JsonParsers;
 import com.example.libms.R;
 import com.example.libms.ui.bookadd.BookAdd;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -69,7 +87,7 @@ public class AddStudent extends Fragment implements LocationListener {
     ImageView mStdImage;
     int uid;
     String pname,author, phoneno, cost;
-
+    private ArrayList<Uri> arrayList; //to store locaiton of the file from local drive
     RadioGroup mGenderRadioGroup;
     RadioButton mGenderRadio;
     int semid,facultyid, gender_id;
@@ -77,20 +95,27 @@ public class AddStudent extends Fragment implements LocationListener {
     Context mContext;
     LocationManager locationManager;
     String latitude,longitude;
-
     private View rooter;
     private static  final int REQUEST_LOCATION=1;
     private static final int PERMISSION_REQUEST_CODE = 200;
     private static final int CAMERA_REQUEST = 1888;
-    String recent_pid;
+    String recent_sid;
     ProgressDialog pdiag;
+    // Camera activity request codes
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
+    private Uri fileUri; // file url to store image/video
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         toolsViewModel =
                 ViewModelProviders.of(this).get(ToolsViewModel.class);
         final View root = inflater.inflate(R.layout.addstudent, container, false);
-
+        arrayList = new ArrayList<>();
         pdiag = new ProgressDialog(getContext());
         Intent intent  = getActivity().getIntent();
         if(intent!=null){
@@ -103,6 +128,7 @@ public class AddStudent extends Fragment implements LocationListener {
                 {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         jsonparser = new JsonParsers();
         mProgressbar = (ProgressBar) root.findViewById(R.id.addstudent_progressBar);
+        mProgressbar2 = (ProgressBar) root.findViewById(R.id.addstudent_progress_bar);
 
         ArrayList<String> semesterarray = new ArrayList<>();
         semesterarray.add("1st Semester");
@@ -124,7 +150,7 @@ public class AddStudent extends Fragment implements LocationListener {
 
         final Spinner spinner3 = (Spinner) root.findViewById(R.id.addstudent_faculty_spinner);
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_dropdown_item,facultyarray);
-        spinner2.setAdapter(adapter3);
+        spinner3.setAdapter(adapter3);
 
         mName = (TextView) root.findViewById(R.id.addstudent_product_name);
         mEmail = (TextView) root.findViewById(R.id.addstudent_book_email);
@@ -142,6 +168,8 @@ public class AddStudent extends Fragment implements LocationListener {
             public void onClick(View v) {
                 if (checkPermission()) {
                     Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+
 
                     startActivityForResult(intent, CAMERA_REQUEST);
                 } else {
@@ -217,11 +245,12 @@ public class AddStudent extends Fragment implements LocationListener {
                         phoneno = mPhoneno.getText().toString();
                         showProgressDialouge();
                         mProgressbar2.setVisibility(View.VISIBLE);
+                        String gender = mGenderRadio.getText().toString();
                         //author = mAuthor.getText().toString();
                         //cost = mCost.getText().toString();
                         String dob = String.valueOf(mdob.getYear())+"-"+String.valueOf(mdob.getMonth()+1)+"-"+String.valueOf(mdob.getDayOfMonth());
-                        new BookAdd().execute(pname,String.valueOf(semid), datem, email, String.valueOf(uid), phoneno, dob, String.valueOf(facultyid));
-                        //uploadImagesToServer(root);
+                        new BookAdd().execute(pname,String.valueOf(semid), datem, email, String.valueOf(uid), phoneno, dob, String.valueOf(facultyid),gender, longitude+", "+latitude);
+                        uploadImagesToServer(root);
                         submitbtn.setClickable(false);
                         // }
 
@@ -234,6 +263,7 @@ public class AddStudent extends Fragment implements LocationListener {
 
         return root;
     }
+
 
     // Star activity for result method to Set captured image on image view after click.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -248,6 +278,7 @@ public class AddStudent extends Fragment implements LocationListener {
 
                 // Adding captured image in bitmap.
                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 // adding captured image in imageview.
                 mStdImage.setImageBitmap(bitmap);
@@ -504,6 +535,8 @@ public class AddStudent extends Fragment implements LocationListener {
             String phoneno = strings[5];
             String dob = strings[6];
             String facultyid = strings[7];
+            String gender = strings[8];
+            String address = strings[9];
 
             HashMap<String,String> prohashmap = new HashMap<>();
             prohashmap.put("name", pname);
@@ -514,15 +547,16 @@ public class AddStudent extends Fragment implements LocationListener {
             prohashmap.put("phoneno", phoneno);
             prohashmap.put("dob", dob);
             prohashmap.put("facultyid", facultyid);
+            prohashmap.put("gender", gender);
+            prohashmap.put("address", address);
 
-
-            jsonObject = jsonparser.registerUser("http://"+ ConstantValues.ipaddress+"/LibMS/addstudent", prohashmap);
+            jsonObject = jsonparser.registerUser("http://"+ ConstantValues.ipaddress+"/LibMS/addstudent/", prohashmap);
 
             try{
                 if(jsonObject == null){
                     FLAG = 1;
                 }else if(jsonObject.getString("status").equals("success")){
-                    recent_pid = jsonObject.getString("recent_pid");
+                    recent_sid = jsonObject.getString("recent_sid");
                     FLAG = 2;
 
                 }else{
@@ -552,6 +586,98 @@ public class AddStudent extends Fragment implements LocationListener {
                 Toast.makeText(getActivity(), "try again", Toast.LENGTH_SHORT).show();
                 mProgressbar2.setVisibility(View.GONE);
             }
+        }
+    }
+    @NonNull
+    private RequestBody createPartFromString(String descriptionString) {
+        return RequestBody.create(MediaType.parse(FileUtils.MIME_TYPE_TEXT), descriptionString);
+    }
+
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        // use the FileUtils to get the actual file by uri
+        File file = FileUtils.getFile(getActivity(), fileUri);
+
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create (MediaType.parse(FileUtils.MIME_TYPE_IMAGE), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+    }
+    private void showProgress() {
+        mProgressbar.setVisibility(View.VISIBLE);
+        //mUploadBtn.setVisibility(View.GONE);
+    }private void closeProgress() {
+        mProgressbar.setVisibility(View.GONE);
+        //mUploadBtn.setVisibility(View.GONE);
+    }
+
+    private void uploadImagesToServer(View root) {
+        final View root2 = root;
+        if (InternetConnection.checkConnection(getActivity())) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(ApiService.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            showProgress();
+
+            // create list of file parts (photo, video, ...)
+            List<MultipartBody.Part> parts = new ArrayList<>();
+
+            // create upload service client
+            ApiService service = retrofit.create(ApiService.class);
+
+            if (arrayList != null) {
+                // create part for file (photo, video, ...)
+                for (int i = 0; i < arrayList.size(); i++) {
+                    parts.add(prepareFilePart("image"+i, arrayList.get(i)));
+                }
+            }
+            else {
+                System.out.println("Error---------------> arrayList empty");
+            }
+
+            // create a map of data to pass along
+            RequestBody description = createPartFromString("www.libms.com");
+            RequestBody size = createPartFromString(""+parts.size());
+            RequestBody uuid = createPartFromString(""+recent_sid);
+
+            // finally, execute the request
+            Call<ResponseBody> call = service.uploadMultiple(description, size, uuid,parts);
+
+            call.enqueue(new Callback<ResponseBody>() {
+                private static final String TAG = "";
+
+                @Override
+                public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                    hideProgress();
+                    closeProgress();
+                    if(response.isSuccessful()) {
+                        pdiag.dismiss();
+                        Toast.makeText(getActivity(),
+                                "Images successfully uploaded!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Snackbar.make(root2.findViewById(android.R.id.content),
+                                "Something went wrong", Snackbar.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                    hideProgress();
+                    closeProgress();
+                    pdiag.dismiss();
+                    Log.e(TAG, "Image upload failed!", t);
+                    Snackbar.make(root2.findViewById(android.R.id.content),
+                            "Image upload failed!", Snackbar.LENGTH_LONG).show();
+                }
+            });
+
+        } else {
+            hideProgress();
+            Toast.makeText(getActivity(),
+                    "Connection not Abalivable", Toast.LENGTH_SHORT).show();
         }
     }
 }
