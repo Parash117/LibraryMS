@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,17 +66,30 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class AddStudent extends Fragment implements LocationListener {
 
@@ -94,6 +108,18 @@ public class AddStudent extends Fragment implements LocationListener {
     JsonParsers jsonparser;
     Context mContext;
     LocationManager locationManager;
+
+    Bitmap bitmap;
+    boolean check = true;
+    String GetImageNameFromEditText;
+
+    String ImageNameFieldOnServer = "image_name" ;
+
+    String ImagePathFieldOnServer = "image_path" ;
+
+    String ImageUploadPathOnSever ="http://"+ConstantValues.ipaddress+"/LibMS/upload-stdphoto/upload1.php" ;
+
+
     String latitude,longitude;
     private View rooter;
     private static  final int REQUEST_LOCATION=1;
@@ -101,14 +127,6 @@ public class AddStudent extends Fragment implements LocationListener {
     private static final int CAMERA_REQUEST = 1888;
     String recent_sid;
     ProgressDialog pdiag;
-    // Camera activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-
-    private Uri fileUri; // file url to store image/video
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -238,10 +256,12 @@ public class AddStudent extends Fragment implements LocationListener {
                         //}
                         //else {
                         //if(arrayList == null || arrayList.size() < 1){
-                        Toast.makeText(getActivity(), "Please Chose Image", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getActivity(), "Please Chose Image", Toast.LENGTH_LONG).show();
                         //mChosebtn.startAnimation(animation);
                         //}
                         //else{
+
+
                         phoneno = mPhoneno.getText().toString();
                         showProgressDialouge();
                         mProgressbar2.setVisibility(View.VISIBLE);
@@ -250,7 +270,8 @@ public class AddStudent extends Fragment implements LocationListener {
                         //cost = mCost.getText().toString();
                         String dob = String.valueOf(mdob.getYear())+"-"+String.valueOf(mdob.getMonth()+1)+"-"+String.valueOf(mdob.getDayOfMonth());
                         new BookAdd().execute(pname,String.valueOf(semid), datem, email, String.valueOf(uid), phoneno, dob, String.valueOf(facultyid),gender, longitude+", "+latitude);
-                        uploadImagesToServer(root);
+                        //uploadImagesToServer(root);
+
                         submitbtn.setClickable(false);
                         // }
 
@@ -279,7 +300,7 @@ public class AddStudent extends Fragment implements LocationListener {
                 // Adding captured image in bitmap.
                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
 
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                bitmap = (Bitmap) data.getExtras().get("data");
                 // adding captured image in imageview.
                 mStdImage.setImageBitmap(bitmap);
 
@@ -576,8 +597,9 @@ public class AddStudent extends Fragment implements LocationListener {
                 Toast.makeText(getActivity(), "Network error", Toast.LENGTH_SHORT).show();
                 mProgressbar2.setVisibility(View.GONE);
             }else if(FLAG == 2){
-                Toast.makeText(getActivity(), "Added To Trash", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Added", Toast.LENGTH_LONG).show();
                 mProgressbar2.setVisibility(View.GONE);
+                ImageUploadToServerFunction();
 
             }else if(FLAG == 3){
                 Toast.makeText(getActivity(), "Server error", Toast.LENGTH_SHORT).show();
@@ -609,9 +631,13 @@ public class AddStudent extends Fragment implements LocationListener {
         //mUploadBtn.setVisibility(View.GONE);
     }private void closeProgress() {
         mProgressbar.setVisibility(View.GONE);
+
         //mUploadBtn.setVisibility(View.GONE);
     }
-
+    public void closepidag(){
+        pdiag.cancel();
+        pdiag.dismiss();
+    }
     private void uploadImagesToServer(View root) {
         final View root2 = root;
         if (InternetConnection.checkConnection(getActivity())) {
@@ -680,4 +706,160 @@ public class AddStudent extends Fragment implements LocationListener {
                     "Connection not Abalivable", Toast.LENGTH_SHORT).show();
         }
     }
+
+    // Upload captured image online on server function.
+    public void ImageUploadToServerFunction(){
+
+        ByteArrayOutputStream byteArrayOutputStreamObject ;
+
+        byteArrayOutputStreamObject = new ByteArrayOutputStream();
+
+        // Converting bitmap image to jpeg format, so by default image will upload in jpeg format.
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStreamObject);
+
+        byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
+
+        final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
+
+        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+
+                super.onPreExecute();
+
+                // Showing progress dialog at image upload time.
+                //progressDialog = ProgressDialog.show(MainActivity.this,"Image is Uploading","Please Wait",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String string1) {
+
+                super.onPostExecute(string1);
+
+                // Dismiss the progress dialog after done uploading.
+                //progressDialog.dismiss();
+
+                // Printing uploading success message coming from server on android app.
+                Toast.makeText(getActivity(),string1,Toast.LENGTH_LONG).show();
+                    closepidag();
+                // Setting image as transparent after done uploading.
+                mStdImage.setImageResource(android.R.color.transparent);
+
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                ImageProcessClass imageProcessClass = new ImageProcessClass();
+
+                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+
+                HashMapParams.put(ImageNameFieldOnServer, "anything");
+
+                HashMapParams.put(ImagePathFieldOnServer, ConvertImage);
+                HashMapParams.put("recent_sid", recent_sid);
+
+                String FinalData = imageProcessClass.ImageHttpRequest(ImageUploadPathOnSever, HashMapParams);
+
+                return FinalData;
+            }
+        }
+        AsyncTaskUploadClass AsyncTaskUploadClassOBJ = new AsyncTaskUploadClass();
+
+        AsyncTaskUploadClassOBJ.execute();
+    }
+
+    public class ImageProcessClass{
+
+        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            try {
+
+                URL url;
+                HttpURLConnection httpURLConnectionObject ;
+                OutputStream OutPutStream;
+                BufferedWriter bufferedWriterObject ;
+                BufferedReader bufferedReaderObject ;
+                int RC ;
+
+                url = new URL(requestURL);
+
+                httpURLConnectionObject = (HttpURLConnection) url.openConnection();
+
+                httpURLConnectionObject.setReadTimeout(19000);
+
+                httpURLConnectionObject.setConnectTimeout(19000);
+
+                httpURLConnectionObject.setRequestMethod("POST");
+
+                httpURLConnectionObject.setDoInput(true);
+
+                httpURLConnectionObject.setDoOutput(true);
+
+                OutPutStream = httpURLConnectionObject.getOutputStream();
+
+                bufferedWriterObject = new BufferedWriter(
+
+                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+
+                bufferedWriterObject.write(bufferedWriterDataFN(PData));
+
+                bufferedWriterObject.flush();
+
+                bufferedWriterObject.close();
+
+                OutPutStream.close();
+
+                RC = httpURLConnectionObject.getResponseCode();
+
+                if (RC == HttpsURLConnection.HTTP_OK) {
+
+                    bufferedReaderObject = new BufferedReader(new InputStreamReader(httpURLConnectionObject.getInputStream()));
+
+                    stringBuilder = new StringBuilder();
+
+                    String RC2;
+
+                    while ((RC2 = bufferedReaderObject.readLine()) != null){
+
+                        stringBuilder.append(RC2);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        private String bufferedWriterDataFN(HashMap<String, String> HashMapParams) throws UnsupportedEncodingException {
+
+            StringBuilder stringBuilderObject;
+
+            stringBuilderObject = new StringBuilder();
+
+            for (Map.Entry<String, String> KEY : HashMapParams.entrySet()) {
+
+                if (check)
+
+                    check = false;
+                else
+                    stringBuilderObject.append("&");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getKey(), "UTF-8"));
+
+                stringBuilderObject.append("=");
+
+                stringBuilderObject.append(URLEncoder.encode(KEY.getValue(), "UTF-8"));
+            }
+
+            return stringBuilderObject.toString();
+        }
+
+    }
+
 }
