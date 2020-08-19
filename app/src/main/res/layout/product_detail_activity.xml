@@ -138,7 +138,7 @@
             android:text="LEND BOOK"
             android:layout_marginTop="15dp"
             android:textColor="#ffffff"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/product_detail_activity_knockbtn"/>
 
     </RelativeLayout>

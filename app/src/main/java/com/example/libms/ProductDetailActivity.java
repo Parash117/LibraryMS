@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.libms.model.Category;
 import com.example.libms.model.ProductModel;
 import com.example.libms.model.StudentModel;
 import com.example.libms.recycler_adapter.RecyclerView_adapter_already_bid_item;
@@ -111,12 +112,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                                mPname.setText(product.getString("pname"));
                                mDetail.setText(product.getString("details"));
-                               mDateofpost.setText(product.getString("dateofpost"));
-
-
+                               mDateofpost.setText(product.getString("dateofadd"));
+                               mAuthor.setText(product.getString("author"));
+                               mCategory.setText(Category.books[Integer.parseInt(product.getString("category_id"))]);
                                //System.out.println("=======================================>owner id "+owneruid);
                                productname = product.getString("pname");
-                              // Picasso.get().load(product.getString("primary_image")).into(mProductImage);
+                               Picasso.get().load("http://"+ConstantValues.ipaddress+product.getString("primary_photo")).into(mProductImage);
                                 loadofferedlist(pid1111);
                                 if(product.getString("uid").equals(String.valueOf(uid))){
                                     mKnockbtn.setClickable(false);
@@ -169,6 +170,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                         students.getString("course"),
                                         students.getString("phoneno"),
                                         students.getString("email"),
+                                        students.getString("address"),
                                         students.getString("address")
                                 ));
                                 //creating adapter object and setting it to recyclerview

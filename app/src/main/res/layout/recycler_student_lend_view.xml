@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/recycler_list_itembackground"
+    android:layout_marginBottom="1dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/first_rl">
+        <ImageView
+            android:layout_marginTop="5dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/ImageForItem_recycler_lend"
+            android:src="@drawable/std201818"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/second_rl"
+        android:layout_toEndOf="@+id/first_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text="Name of Student"
+            android:layout_marginLeft="10dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:id="@+id/NameForItem_recycler_lend"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/third_rl"
+        android:layout_toEndOf="@+id/first_rl"
+        android:layout_below="@+id/second_rl">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:text="faculty"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/facultyname_recycler_lend"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/third_rl"
+        android:layout_below="@id/second_rl"
+        android:id="@+id/forth_rl">
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/first_rl"
+        android:layout_below="@id/third_rl"
+        android:id="@+id/fifth_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:id="@+id/phoneno_recycler_lend"
+            android:text="Phone no"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/fifth_rl"
+        android:layout_below="@id/forth_rl"
+        android:id="@+id/sixth_rl">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Semester"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/semester_recycler_lend"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/first_rl"
+        android:layout_below="@id/fifth_rl"
+        android:id="@+id/seventh_rl">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/email_recycler_lend"
+            android:text="Email"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/email_recycler_lend"
+            android:id="@+id/lendbook_btn_home"
+            android:text="Lend Book to "/>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
