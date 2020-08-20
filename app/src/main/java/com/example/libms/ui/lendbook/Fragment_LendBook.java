@@ -86,13 +86,13 @@ public class Fragment_LendBook extends Fragment {
 
                                 //adding the product to product list
                                 stdarray.add(new StudentModel(
-                                        product.getString(""),
-                                        product.getString(""),
-                                        product.getString(""),
-                                        product.getString(""),
-                                        product.getString(""),
-                                        product.getString(""),
-                                        product.getString("")
+                                        product.getString("sid"),
+                                        product.getString("name"),
+                                        product.getString("facultyid"),
+                                        product.getString("phoneno"),
+                                        product.getString("email"),
+                                        product.getString("semesterid"),
+                                        product.getString("photo")
                                 ));
                             }
 

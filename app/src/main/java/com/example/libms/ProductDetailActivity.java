@@ -24,6 +24,7 @@ import com.example.libms.model.Category;
 import com.example.libms.model.ProductModel;
 import com.example.libms.model.StudentModel;
 import com.example.libms.recycler_adapter.RecyclerView_adapter_already_bid_item;
+import com.example.libms.ui.lendbook.Fragment_LendBook;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -35,6 +36,9 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,11 +85,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         productList2 = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.product_detail_activity_lendto_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductDetailActivity.this));
-
+        Fragment fragment = new Fragment_LendBook();
+        final FragmentTransaction fmtransaction = getSupportFragmentManager().beginTransaction();
         mKnockbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+               // fmtransaction.replace(R.id., fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+               // fmtransaction.addToBackStack(null);  // this will manage backstack
+               // fmtransaction.commit();
 
 
             }
