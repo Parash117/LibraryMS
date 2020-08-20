@@ -85,14 +85,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         productList2 = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.product_detail_activity_lendto_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProductDetailActivity.this));
-        Fragment fragment = new Fragment_LendBook();
-        final FragmentTransaction fmtransaction = getSupportFragmentManager().beginTransaction();
+
         mKnockbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // fmtransaction.replace(R.id., fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
-               // fmtransaction.addToBackStack(null);  // this will manage backstack
-               // fmtransaction.commit();
+                Fragment fragment = new Fragment_LendBook();
+                FragmentTransaction fmtransaction = getSupportFragmentManager().beginTransaction();
+                fmtransaction.replace(R.id.product_detail_main_layout, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+                fmtransaction.addToBackStack(null);  // this will manage backstack
+                fmtransaction.commit();
 
 
             }

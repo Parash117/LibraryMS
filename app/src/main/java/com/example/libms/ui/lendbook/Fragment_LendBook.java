@@ -66,7 +66,7 @@ public class Fragment_LendBook extends Fragment {
     }
 
     private void searchloadstudent(String keyword){
-        stdarray = new ArrayList<>();
+        //stdarray = new ArrayList<>();
         System.out.println("http://"+ ConstantValues.ipaddress+"/LibMS/searchStudentforlend/index.php?keyword="+keyword);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://"+ConstantValues.ipaddress+"/LibMS/searchStudentforlend/index.php?keyword="+keyword,
 
@@ -97,7 +97,8 @@ public class Fragment_LendBook extends Fragment {
                             }
 
                             recyclerAdapter = new RecyclerView_adapter_stdlend_stdlist(getActivity(), stdarray, pid);
-
+                            recyclerView1.setAdapter(recyclerAdapter);
+                            recyclerAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
