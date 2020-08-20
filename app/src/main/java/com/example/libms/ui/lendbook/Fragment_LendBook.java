@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -50,6 +51,7 @@ public class Fragment_LendBook extends Fragment {
         mStdId = (EditText) root.findViewById(R.id.fragment_lendbook_id);
         mSearchbtn = (Button) root.findViewById(R.id.fragment_lendbook_search_btn);
         recyclerView1 = (RecyclerView) root.findViewById(R.id.fragment_lendbook_recycler_container);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(getActivity()));
         stdarray = new ArrayList<>();
         Intent intent  = getActivity().getIntent();
         pid = intent.getStringExtra("pid");
@@ -66,7 +68,7 @@ public class Fragment_LendBook extends Fragment {
     }
 
     private void searchloadstudent(String keyword){
-        //stdarray = new ArrayList<>();
+        stdarray = new ArrayList<>();
         System.out.println("http://"+ ConstantValues.ipaddress+"/LibMS/searchStudentforlend/index.php?keyword="+keyword);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://"+ConstantValues.ipaddress+"/LibMS/searchStudentforlend/index.php?keyword="+keyword,
 

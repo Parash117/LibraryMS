@@ -21,7 +21,10 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/fragment_lendbook_text_id"
             android:id="@+id/fragment_lendbook_id"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:text="0000"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 
     <RelativeLayout

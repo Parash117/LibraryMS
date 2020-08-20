@@ -66,13 +66,14 @@
         android:layout_toEndOf="@id/first_rl"
         android:layout_below="@id/third_rl"
         android:id="@+id/fifth_rl">
+
         <TextView
+            android:id="@+id/phoneno_recycler_lend"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:id="@+id/phoneno_recycler_lend"
-            android:text="Phone no"/>
+            android:text="Phone no"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout

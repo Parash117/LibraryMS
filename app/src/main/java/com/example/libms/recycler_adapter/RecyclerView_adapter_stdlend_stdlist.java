@@ -31,15 +31,16 @@ public class RecyclerView_adapter_stdlend_stdlist extends RecyclerView.Adapter<R
         this.context = context;
         this.stdList = stdList;
         this.pid = pid;
+        this.mInflater = LayoutInflater.from(context);
+
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView_adapter_stdlend_stdlist.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recycler_student_lend_view, parent, false);
         return new ViewHolder(view);
-    }
 
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StudentModel std = stdList.get(position);
@@ -48,7 +49,8 @@ public class RecyclerView_adapter_stdlend_stdlist extends RecyclerView.Adapter<R
         holder.mSemester.setText(std.getSemester());
         holder.mEmail.setText(std.getEmail());
         holder.mPhoneno.setText(std.getPhoneno());
-        Picasso.get().load("http://"+ ConstantValues.ipaddress+std.getPhoto()).into(holder.mStudentImage);
+        System.out.println("http://"+ ConstantValues.ipaddress+std.getPhoto());
+        Picasso.get().load("http://"+ ConstantValues.ipaddress+"/"+std.getPhoto()).into(holder.mStudentImage);
     }
 
 
@@ -69,6 +71,7 @@ public class RecyclerView_adapter_stdlend_stdlist extends RecyclerView.Adapter<R
             mEmail = (TextView) itemView.findViewById(R.id.email_recycler_lend);
             mLendBtn = (Button) itemView.findViewById(R.id.lendbook_btn_home);
             mStudentImage = (ImageView) itemView.findViewById(R.id.ImageForItem_recycler_lend);
+            mPhoneno = (TextView) itemView.findViewById(R.id.phoneno_recycler_lend);
             setClickListener(mClickListener);
             itemView.setOnClickListener(this);
         }
