@@ -74,6 +74,8 @@ public class RecyclerView_adapter_already_bid_item extends RecyclerView.Adapter<
         //holder.myTextView.setText(animal);
         StudentModel product = stdList.get(position);
         holder.mpname.setText(product.getName());
+        holder.maddress.setText(product.getEmail());
+        holder.muname.setText(product.getPhoneno());
         //holder.mdateofoffer.setText(product.());
 
     }
@@ -101,14 +103,14 @@ public class RecyclerView_adapter_already_bid_item extends RecyclerView.Adapter<
             mAcceptBtn = itemView.findViewById(R.id.recycler_already_offered_item_acceptBtn);
             mRejectBtn = itemView.findViewById(R.id.recycler_already_offered_item_rejectBtn);
             mAcceptBtn.setBackgroundColor(Color.parseColor("#7AD7F0"));
-            if(ownerid.equals(String.valueOf(uid))){
+            /*if(ownerid.equals(String.valueOf(uid))){
                 //mAcceptBtn.setVisibility(View.VISIBLE);
                 mRejectBtn.setVisibility(View.VISIBLE);
             }
             else{
                 //mAcceptBtn.setVisibility(View.GONE);
                 mRejectBtn.setVisibility(View.GONE);
-            }
+            }*/
                                         //uid, targetnameofowner, targetproductid, yourproductname, yourproductid
 
 

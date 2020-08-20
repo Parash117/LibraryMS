@@ -45,7 +45,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ProductDetailActivity extends AppCompatActivity {
     RecyclerView recyclerView,recyclerView1, recyclerView2;
     private List<ProductModel> productList2;
-    private List<StudentModel> stdList;
+    private List<StudentModel> stdList = new ArrayList<>();
     TextView mPname,mDetail,mDateofpost,mCategory,mAuthor;
     Button mKnockbtn;
     ImageView mCloseIcon,mProductImage;
@@ -84,7 +84,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         productList2 = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.product_detail_activity_lendto_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ProductDetailActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(ProductDetailActivity.this,LinearLayoutManager.HORIZONTAL,false));
 
         mKnockbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +156,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     public void loadofferedlist(final String pid){
-        String URL = "http://"+ConstantValues.ipaddress+"/maremare/getofferedlist/index.php?pid="+pid;
+        String URL = "http://"+ConstantValues.ipaddress+"/LibMS/studentByBook/index.php?bid="+pid;
         final String pipid = pid;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
                 new Response.Listener<String>() {
@@ -173,18 +173,19 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 JSONObject students = array.getJSONObject(i);
                                 //adding the product to product list
                                 stdList.add(new StudentModel(
-                                        students.getString("id"),
                                         students.getString("name"),
-                                        students.getString("course"),
+                                        students.getString("name"),
+                                        students.getString("facultyid"),
                                         students.getString("phoneno"),
                                         students.getString("email"),
-                                        students.getString("address"),
-                                        students.getString("address")
+                                        students.getString("semesterid"),
+                                        students.getString("photo")
                                 ));
                                 //creating adapter object and setting it to recyclerview
-                                RecyclerView_adapter_already_bid_item adapter = new RecyclerView_adapter_already_bid_item(ProductDetailActivity.this, stdList, getSupportFragmentManager());
-                                recyclerView1.setAdapter(adapter);
+
                             }
+                            RecyclerView_adapter_already_bid_item adapter = new RecyclerView_adapter_already_bid_item(ProductDetailActivity.this, stdList, getSupportFragmentManager());
+                            recyclerView.setAdapter(adapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

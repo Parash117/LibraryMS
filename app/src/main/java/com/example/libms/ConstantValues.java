@@ -2,9 +2,9 @@ package com.example.libms;
 
 public class ConstantValues {
 
-    public static String ipaddress = "192.168.0.9:8080";
+    public static String ipaddress = "192.168.100.56:80";
 
     ConstantValues(){
-        ipaddress = "192.168.0.9:8080";
+        ipaddress = "192.168.100.56:80";
     }
 }
